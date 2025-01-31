@@ -1,0 +1,11 @@
+{
+    "required": true,
+    "package": "net.creeperhost.minetogetherpartners.mixin",
+    "minVersion": "0.7.11",
+    "client": [
+      "order.MixinServerSelectionList",
+      "order.TitleScreenMixin"
+    ],
+    "server": [
+    ]
+}
