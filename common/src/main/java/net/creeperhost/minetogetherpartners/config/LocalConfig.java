@@ -77,9 +77,6 @@ public class LocalConfig {
         return config;
     }
 
-    @Comment ("If menu buttons are enabled.")
-    public boolean mainMenuButtons = true;
-
     @Comment ("If the Multiplayer server list should have CreeperHost adverts.")
     public boolean mpMenuEnabled = false;
 }
