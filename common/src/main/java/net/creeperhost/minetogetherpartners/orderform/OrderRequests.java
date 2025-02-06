@@ -3,13 +3,13 @@ package net.creeperhost.minetogetherpartners.orderform;
 import net.covers1624.quack.net.httpapi.EngineRequest;
 import net.covers1624.quack.net.httpapi.EngineResponse;
 import net.covers1624.quack.net.httpapi.WebBody;
+import net.creeperhost.minetogether.lib.util.Countries;
+import net.creeperhost.minetogether.lib.web.requests.GetClosestDCRequest;
 import net.creeperhost.minetogetherpartners.MineTogetherPartners;
 import net.creeperhost.minetogether.lib.web.ApiResponse;
 import net.creeperhost.minetogetherpartners.orderform.data.Order;
 import net.creeperhost.minetogetherpartners.orderform.data.OrderSummary;
 import net.creeperhost.minetogetherpartners.orderform.requests.*;
-import net.creeperhost.minetogetherpartners.util.Countries;
-import net.creeperhost.minetogetherpartners.util.GetClosestDCRequest;
 import net.creeperhost.minetogetherpartners.util.ModPackInfo;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -84,7 +84,7 @@ public class OrderRequests {
     }
 
     public static OrderSummary getSummary(Order order, String promo) {
-        if (order.country.isEmpty()) order.country = Countries.getOurCountry();
+        if (order.country.isEmpty()) order.country = Countries.getOurCountry(MineTogetherPartners.API);
         if (order.serverLocation.isEmpty()) {
             order.serverLocation = getDCsByDistance().getDataCenter().getName();
         }

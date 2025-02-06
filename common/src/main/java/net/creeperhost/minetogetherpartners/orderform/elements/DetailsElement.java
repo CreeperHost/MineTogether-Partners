@@ -1,10 +1,10 @@
 package net.creeperhost.minetogetherpartners.orderform.elements;
 
+import net.creeperhost.minetogether.lib.util.Countries;
 import net.creeperhost.minetogetherpartners.gui.MTStyle;
 import net.creeperhost.minetogetherpartners.gui.dialogs.ItemSelectDialog;
 import net.creeperhost.minetogetherpartners.orderform.OrderGui;
 import net.creeperhost.minetogetherpartners.orderform.OrderRequests;
-import net.creeperhost.minetogetherpartners.util.Countries;
 import net.creeperhost.polylib.client.modulargui.elements.*;
 import net.creeperhost.polylib.client.modulargui.lib.Constraints;
 import net.creeperhost.polylib.client.modulargui.lib.TextState;

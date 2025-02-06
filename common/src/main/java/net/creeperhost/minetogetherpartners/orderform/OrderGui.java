@@ -1,6 +1,8 @@
 package net.creeperhost.minetogetherpartners.orderform;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import net.creeperhost.minetogether.lib.util.Countries;
+import net.creeperhost.minetogetherpartners.MineTogetherPartners;
 import net.creeperhost.minetogetherpartners.gui.MTStyle;
 import net.creeperhost.minetogetherpartners.config.Config;
 import net.creeperhost.minetogetherpartners.gui.MTTextures;
@@ -13,7 +15,6 @@ import net.creeperhost.minetogetherpartners.orderform.elements.LocationElement;
 import net.creeperhost.minetogetherpartners.orderform.elements.ServerConfigElement;
 import net.creeperhost.minetogetherpartners.orderform.elements.WorldElement;
 import net.creeperhost.minetogetherpartners.orderform.requests.GetDataCentresRequest.DC;
-import net.creeperhost.minetogetherpartners.util.Countries;
 import net.creeperhost.polylib.client.modulargui.ModularGui;
 import net.creeperhost.polylib.client.modulargui.ModularGuiScreen;
 import net.creeperhost.polylib.client.modulargui.elements.*;
@@ -125,7 +126,7 @@ public class OrderGui implements GuiProvider {
                 byDistance.getDataCenters().forEach(dc -> dcDistance.put(dc.getName(), dc.getDistance()));
             }
 
-            order.country = Countries.getOurCountry();
+            order.country = Countries.getOurCountry(MineTogetherPartners.API);
             summaryUpdateRequired = true;
         }, EXECUTOR);
         order.name = getDefaultName();
