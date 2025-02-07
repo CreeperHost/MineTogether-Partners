@@ -23,14 +23,6 @@ dependencies {
     modApi("net.creeperhost:MineTogetherSessions:${mtsession_version}") {
         transitive false
     }
-    modApi("net.creeperhost:MTConnectProxyCommon:${mtproxy_version}") {
-        exclude group: "net.creeperhost", module: "MineTogetherSessions"
-        exclude group: "net.creeperhost", module: "MineTogetherLib"
-    }
-
-    modApi 'org.nanohttpd:nanohttpd:2.3.1'
-    modApi 'com.github.scribejava:scribejava-apis:6.9.0'
-    modApi 'com.github.scribejava:scribejava-core:6.9.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
