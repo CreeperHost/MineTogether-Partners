@@ -2,7 +2,6 @@ package net.creeperhost.minetogetherpartners.orderform;
 
 import net.creeperhost.minetogetherpartners.MineTogetherPartners;
 import net.creeperhost.minetogetherpartners.config.LocalConfig;
-import net.creeperhost.polylib.client.screen.widget.buttons.ButtonString;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -28,12 +27,13 @@ public class CreeperHostServerEntry extends ServerSelectionList.NetworkServerEnt
         super(null, new LanServer("", ""));
         this.serverSelectionList = serverSelectionList;
 
-        removeButton = new ButtonString(0, 0, 10, 10, Component.translatable(ChatFormatting.RED + new String(Character.toChars(10006))), button ->
-        {
-            LocalConfig.instance().mpMenuEnabled = false;
-            LocalConfig.save();
-            this.mc.setScreen(new JoinMultiplayerScreen(new TitleScreen()));
-        });
+        removeButton = Button.builder(Component.translatable(ChatFormatting.RED + new String(Character.toChars(10006))), button -> {
+                    LocalConfig.instance().mpMenuEnabled = false;
+                    LocalConfig.save();
+                    this.mc.setScreen(new JoinMultiplayerScreen(new TitleScreen()));
+                })
+                .size(12, 12)
+                .build();
     }
 
     @Override

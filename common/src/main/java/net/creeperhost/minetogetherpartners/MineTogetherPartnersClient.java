@@ -1,5 +1,6 @@
 package net.creeperhost.minetogetherpartners;
 
+import dev.architectury.event.events.client.ClientLifecycleEvent;
 import net.creeperhost.minetogether.session.MineTogetherSession;
 import net.creeperhost.minetogetherpartners.util.MTSessionProvider;
 import org.apache.logging.log4j.LogManager;
@@ -17,14 +18,14 @@ public class MineTogetherPartnersClient {
     public static void init() {
         LOGGER.info("Initializing MineTogetherPartnersClient!");
 
-        MineTogetherSession.getDefault().setProvider(new MTSessionProvider());
-        MineTogetherSession.getDefault().onTokenRefreshed(token -> {
-            MineTogetherPartners.AUTH.setHeader("Authorization", "Bearer " + token);
-        });
-        // Trigger session validation and set auth header.
-        MineTogetherSession.getDefault().getTokenAsync();
+        //Cant do this in init anymore because init now occurs before Minecraft.instance is initialised.
+        ClientLifecycleEvent.CLIENT_SETUP.register(instance -> {
+            MineTogetherSession.getDefault().setProvider(new MTSessionProvider());
+            MineTogetherSession.getDefault().onTokenRefreshed(token -> MineTogetherPartners.AUTH.setHeader("Authorization", "Bearer " + token));
 
-//        Integration.loadOptionalIntegration("ftbpc", () -> FTBPackCompanionCompat::init);
+            // Trigger session validation and set auth header.
+            MineTogetherSession.getDefault().getTokenAsync();
+        });
     }
 
 }
