@@ -9,6 +9,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.server.LanServer;
 import net.minecraft.network.chat.Component;
@@ -45,10 +46,10 @@ public class CreeperHostServerEntry extends ServerSelectionList.NetworkServerEnt
         }
 
         int transparentString = (int) (Math.clamp(transparency * 254, 0, 255)) << 24;
-        graphics.blit(RenderType::guiTextured, serverIcon, x, y, 0.0F, 0.0F, 32, 32, 32, 32, 0xffffff + transparentString);
-        graphics.drawString(mc.font, Component.translatable("minetogether.multiplayerscreen.partner"), x + 35, y, 0xffffff + transparentString);
-        graphics.drawString(mc.font, Component.translatable("minetogether.multiplayerscreen.getserver"), x + 32 + 3, y + this.mc.font.lineHeight + 1, 0xffffff + transparentString);
-        graphics.drawString(mc.font, Component.translatable("minetogether.multiplayerscreen.clickherebrand"), x + 32 + 3, y + (this.mc.font.lineHeight * 2) + 3, 0x808080 + transparentString);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, serverIcon, x, y, 0.0F, 0.0F, 32, 32, 32, 32, 0xFFffffff + transparentString);
+        graphics.drawString(mc.font, Component.translatable("minetogether.multiplayerscreen.partner"), x + 35, y, 0xFFffffff + transparentString);
+        graphics.drawString(mc.font, Component.translatable("minetogether.multiplayerscreen.getserver"), x + 32 + 3, y + this.mc.font.lineHeight + 1, 0xFFffffff + transparentString);
+        graphics.drawString(mc.font, Component.translatable("minetogether.multiplayerscreen.clickherebrand"), x + 32 + 3, y + (this.mc.font.lineHeight * 2) + 3, 0xFF808080 + transparentString);
 
         if (removeButton != null) {
             removeButton.render(graphics, x, y, p_render_9_);
@@ -56,7 +57,7 @@ public class CreeperHostServerEntry extends ServerSelectionList.NetworkServerEnt
             removeButton.setY(y);
 
             if (removeButton.isMouseOver(mouseX, mouseY)) {
-                graphics.renderTooltip(mc.font, Component.translatable("minetogether.multiplayerscreen.hide_ad"), mouseX, mouseY);
+                graphics.setTooltipForNextFrame(mc.font, Component.translatable("minetogether.multiplayerscreen.hide_ad"), mouseX, mouseY);
             }
         }
     }
