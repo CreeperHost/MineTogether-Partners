@@ -20,7 +20,7 @@ license = "GNU General Public License v3.0"
 [[dependencies.minetogetherpartners]]
     modId = "minecraft"
     type="required"
-    versionRange = "[21.0.0-beta,)"
+    versionRange = "[1.21,)"
     ordering = "NONE"
     side = "BOTH"
 
