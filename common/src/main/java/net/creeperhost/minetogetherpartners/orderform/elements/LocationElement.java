@@ -77,6 +77,9 @@ public class LocationElement extends GuiElement<LocationElement> {
             GuiElement<?> element = null;
             dcOrder.sort(Comparator.comparingDouble(dc -> gui.dcPing.getOrDefault(dc.slug, -1) < 0 ? 5000 : gui.dcPing.getOrDefault(dc.slug, -1) + (dc.available ? 0 : 5000)));
             for (GetDataCentresRequest.DC dc : dcOrder) {
+                if (dc.slug == null || dc.slug.endsWith("(value)")) {
+                    continue;
+                }
                 element = locationButton(locations, dc)
                         .constrain(TOP, element == null ? match(locations.get(TOP)) : relative(element.get(BOTTOM), 1))
                         .constrain(LEFT, match(locations.get(LEFT)))
