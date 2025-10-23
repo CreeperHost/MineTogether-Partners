@@ -58,8 +58,8 @@ public class MineTogetherPartners {
 
         ModPackInfo.init();
         ModPackInfo.waitForInfo(info -> AUTH.setHeader("Identifier", info.realName));
-        if (Objects.requireNonNull(Platform.getEnv()) == EnvType.CLIENT) {
-            MineTogetherPartnersClient.init();
-        }
+//        if (Objects.requireNonNull(Platform.getEnv()) == EnvType.CLIENT) {
+//            MineTogetherPartnersClient.init();
+//        }
     }
 }

@@ -20,9 +20,9 @@ dependencies {
     modApi("net.creeperhost:MineTogetherLib:${mtlib_version}") {
         exclude group: "net.creeperhost", module: "MineTogetherSessions"
     }
-    modApi("net.creeperhost:MineTogetherSessions:${mtsession_version}") {
-        transitive false
-    }
+//    modApi("net.creeperhost:MineTogetherSessions:${mtsession_version}") {
+//        transitive false
+//    }
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
