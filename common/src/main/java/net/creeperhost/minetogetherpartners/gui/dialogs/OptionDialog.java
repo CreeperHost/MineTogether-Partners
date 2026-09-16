@@ -86,7 +86,7 @@ public class OptionDialog extends GuiElement<OptionDialog> implements Background
     }
 
     @Override
-    public boolean keyPressed(int key, int scancode, int modifiers) {
+    public boolean keyPressed(net.minecraft.client.input.KeyEvent event) {
         return true;
     }
 

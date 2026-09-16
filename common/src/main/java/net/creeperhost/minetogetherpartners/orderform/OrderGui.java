@@ -25,7 +25,7 @@ import net.creeperhost.polylib.client.modulargui.lib.geometry.Axis;
 import net.creeperhost.polylib.client.modulargui.lib.geometry.Constraint;
 import net.creeperhost.polylib.client.modulargui.sprite.Material;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.LogManager;
@@ -166,7 +166,7 @@ public class OrderGui implements GuiProvider {
                 .constrain(BOTTOM, relative(priceBg.get(TOP), -2));
 
         GuiButton back = MTStyle.Flat.button(root, Component.translatable("minetogether:gui.button.back_arrow"))
-                .onPress(() -> gui.mc().setScreen(gui.getParentScreen()))
+                .onPress(() -> gui.mc().gui.setScreen(gui.getParentScreen()))
                 .constrain(BOTTOM, relative(orderBg.get(TOP), -4))
                 .constrain(LEFT, match(orderBg.get(LEFT)))
                 .constrain(WIDTH, literal(50))
@@ -268,7 +268,7 @@ public class OrderGui implements GuiProvider {
                 .setScroll(false)
                 .setLineSpacing(1)
                 .setVerticalAlign(Align.CENTER)
-                .setTextColour(0xFF000000 | GREEN.getColor())
+                .setTextColour(0xFF000000 | net.minecraft.network.chat.TextColor.GREEN.getValue())
                 .setEnabled(() -> summary.summaryError.isEmpty())
                 .constrain(TOP, relative(lastElement.get(BOTTOM), 4))
                 .constrain(LEFT, left)
@@ -299,7 +299,7 @@ public class OrderGui implements GuiProvider {
 
         lastElement = new GuiText(scrollPane, () -> Component.literal(getDCName(order.serverLocation)))
                 .setEnabled(() -> summary.summaryError.isEmpty())
-                .setTextColour(0xFF000000 | GREEN.getColor())
+                .setTextColour(0xFF000000 | net.minecraft.network.chat.TextColor.GREEN.getValue())
                 .setWrap(true)
                 .constrain(TOP, relative(lastElement.get(BOTTOM), 2))
                 .constrain(LEFT, left)
@@ -316,7 +316,7 @@ public class OrderGui implements GuiProvider {
 
         lastElement = new GuiText(scrollPane, () -> Component.literal(summary.serverHostName))
                 .setEnabled(() -> summary.summaryError.isEmpty())
-                .setTextColour(0xFF000000 | GREEN.getColor())
+                .setTextColour(0xFF000000 | net.minecraft.network.chat.TextColor.GREEN.getValue())
                 .constrain(TOP, relative(lastElement.get(BOTTOM), 2))
                 .constrain(LEFT, left)
                 .constrain(RIGHT, right)
@@ -333,7 +333,7 @@ public class OrderGui implements GuiProvider {
         for (int i = 1; i < 6; i++) {
             lastElement = new GuiText(scrollPane, Component.translatable("minetogether:gui.order.summary.feature" + i))
                     .setEnabled(() -> summary.summaryError.isEmpty())
-                    .setTextColour(0xFF000000 | GREEN.getColor())
+                    .setTextColour(0xFF000000 | net.minecraft.network.chat.TextColor.GREEN.getValue())
                     .constrain(TOP, relative(lastElement.get(BOTTOM), i == 1 ? 2 : 1))
                     .constrain(LEFT, left)
                     .constrain(RIGHT, right)
@@ -351,7 +351,7 @@ public class OrderGui implements GuiProvider {
 
         lastElement = new GuiText(scrollPane, Component.translatable("minetogether:gui.order.summary.paying_for_details1"))
                 .setEnabled(() -> summary.summaryError.isEmpty())
-                .setTextColour(0xFF000000 | GREEN.getColor())
+                .setTextColour(0xFF000000 | net.minecraft.network.chat.TextColor.GREEN.getValue())
                 .setWrap(true)
                 .constrain(TOP, relative(lastElement.get(BOTTOM), 2))
                 .constrain(LEFT, left)
@@ -360,7 +360,7 @@ public class OrderGui implements GuiProvider {
 
         lastElement = new GuiText(scrollPane, Component.translatable("minetogether:gui.order.summary.paying_for_details2"))
                 .setEnabled(() -> summary.summaryError.isEmpty())
-                .setTextColour(0xFF000000 | GREEN.getColor())
+                .setTextColour(0xFF000000 | net.minecraft.network.chat.TextColor.GREEN.getValue())
                 .setWrap(true)
                 .constrain(TOP, relative(lastElement.get(BOTTOM), 1))
                 .constrain(LEFT, left)
@@ -583,7 +583,7 @@ public class OrderGui implements GuiProvider {
             processingShowCloseButton = true;
             setProcessing(Component.translatable("minetogether:gui.button.invoice"), () -> {
                 try {
-                    Util.getPlatform().openUri(new URI(getPaymentLink(invoiceID)));
+                    com.mojang.blaze3d.Blaze3D.openUri(new URI(getPaymentLink(invoiceID)));
                 } catch (Throwable throwable) {
                     gui.mc().keyboardHandler.setClipboard(getPaymentLink(invoiceID));
                     processingText = Component.literal("Something went wrong while attempting to open the link,\nSo the link has been copied to your clipboard.");

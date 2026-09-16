@@ -3,7 +3,6 @@
   "package": "net.creeperhost.minetogetherpartners.mixin",
   "minVersion": "0.7.11",
   "client": [
-    "JoinMultiplayerScreenMixin",
     "order.MixinServerSelectionList",
     "order.TitleScreenMixin"
   ],

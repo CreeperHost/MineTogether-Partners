@@ -1,24 +1,23 @@
 package net.creeperhost.minetogetherpartners;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.network.Connection;
 import org.jetbrains.annotations.Nullable;
-
 import java.nio.file.Path;
 
-/**
- * Created by covers1624 on 26/8/22.
- */
-public class MineTogetherPlatform {
+/** Mod metadata supplied by the loader before common initialization. */
+public final class MineTogetherPlatform {
+    private static Path modJar;
+    private static Path gameFolder;
+    private static String version;
 
-    @Nullable
-    @ExpectPlatform
-    public static Path getModJar() {
-        throw new AssertionError();
+    private MineTogetherPlatform() {}
+
+    public static void initialize(@Nullable Path jar, Path gameDir, String modVersion) {
+        modJar = jar;
+        gameFolder = gameDir;
+        version = modVersion;
     }
 
-    @ExpectPlatform
-    public static String getVersion() {
-        throw new AssertionError();
-    }
+    public static @Nullable Path getModJar() { return modJar; }
+    public static Path getGameFolder() { return gameFolder; }
+    public static String getVersion() { return version; }
 }

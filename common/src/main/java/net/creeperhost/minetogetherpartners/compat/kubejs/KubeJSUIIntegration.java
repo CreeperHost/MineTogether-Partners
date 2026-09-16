@@ -7,5 +7,5 @@ import net.minecraft.client.gui.screens.Screen;
 import java.util.function.Consumer;
 
 public interface KubeJSUIIntegration {
-    Consumer<Screen> ORDER = screen -> Minecraft.getInstance().setScreen(new OrderGui.Screen(screen));
+    Consumer<Screen> ORDER = screen -> Minecraft.getInstance().gui.setScreen(new OrderGui.Screen(screen));
 }

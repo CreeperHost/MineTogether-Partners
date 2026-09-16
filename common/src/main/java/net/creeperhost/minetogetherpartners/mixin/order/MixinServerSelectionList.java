@@ -11,31 +11,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin (ServerSelectionList.class)
+@Mixin(ServerSelectionList.class)
 public class MixinServerSelectionList {
+    @Shadow @Final private JoinMultiplayerScreen screen;
 
-    @Shadow
-    @Final
-    private JoinMultiplayerScreen screen;
-
-    @Inject (at = @At ("RETURN"), method = "refreshEntries()V")
+    @Inject(method = "refreshEntries()V", at = @At("RETURN"))
     private void afterRefreshEntries(CallbackInfo info) {
         if (!LocalConfig.instance().mpMenuEnabled) return;
-        ServerSelectionList thisFake = (ServerSelectionList) (Object) this;
-        int size = thisFake.children().size();
-//        for (int i = 0; i < size; i++) {
-//            if (thisFake.children().get(i) instanceof ServerSelectionList.NetworkServerEntry realEntry) {
-//                if (realEntry.getServerData() instanceof LanServerInfoConnect) {
-//                    thisFake.children().set(i, new OurServerListEntryLanDetected(screen, (LanServerInfoConnect) realEntry.getServerData(), thisFake));
-//                }
-//            }
-//        }
-        if (LocalConfig.instance().mpMenuEnabled) {
-            try {
-                thisFake.children().add(size, new CreeperHostServerEntry(thisFake));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        ServerSelectionList list = (ServerSelectionList) (Object) this;
+        list.addEntry(new CreeperHostServerEntry(screen, list));
     }
 }

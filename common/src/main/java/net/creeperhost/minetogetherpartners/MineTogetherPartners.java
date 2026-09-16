@@ -1,7 +1,7 @@
 package net.creeperhost.minetogetherpartners;
 
-import dev.architectury.injectables.targets.ArchitecturyTarget;
-import dev.architectury.platform.Platform;
+import net.creeperhost.polylib.platform.Services;
+
 import net.covers1624.quack.net.httpapi.HttpEngine;
 import net.covers1624.quack.net.httpapi.java11.Java11HttpEngine;
 import net.creeperhost.minetogetherpartners.config.Config;
@@ -12,11 +12,9 @@ import net.creeperhost.minetogetherpartners.orderform.WebUtils;
 import net.creeperhost.minetogetherpartners.util.Log4jUtils;
 import net.creeperhost.minetogetherpartners.util.ModPackInfo;
 import net.creeperhost.minetogetherpartners.util.SignatureVerifier;
-import net.fabricmc.api.EnvType;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Objects;
 
 /**
  * Main common mod entrypoint.
@@ -36,19 +34,19 @@ public class MineTogetherPartners {
             .httpEngine(WEB_ENGINE)
             .addUserAgentSegment("MineTogether-lib/" + MineTogetherLib.VERSION)
             .addUserAgentSegment("MineTogether-Partners-mod/" + MineTogetherPlatform.getVersion())
-            .addUserAgentSegment("Minecraft/" + Platform.getMinecraftVersion())
-            .addUserAgentSegment("Modloader/" + ArchitecturyTarget.getCurrentTarget())
+            .addUserAgentSegment("Minecraft/" + net.minecraft.SharedConstants.getCurrentVersion().name())
+            .addUserAgentSegment("Modloader/" + Services.PLATFORM.getPlatformName())
             .webAuth(AUTH)
             .build();
     static {
         WebUtils.userAgent += " MineTogether-lib/" + MineTogetherLib.VERSION;
         WebUtils.userAgent += " MineTogether-mod/" + MineTogetherPlatform.getVersion();
-        WebUtils.userAgent += " Minecraft/" + Platform.getMinecraftVersion();
-        WebUtils.userAgent += " Modloader/" + ArchitecturyTarget.getCurrentTarget();
+        WebUtils.userAgent += " Minecraft/" + net.minecraft.SharedConstants.getCurrentVersion().name();
+        WebUtils.userAgent += " Modloader/" + Services.PLATFORM.getPlatformName();
     }
 
     public static void init() {
-        Log4jUtils.attachMTLogs(Platform.getGameFolder().resolve("logs"));
+        Log4jUtils.attachMTLogs(MineTogetherPlatform.getGameFolder().resolve("logs"));
         LOGGER.info("Initializing MineTogether Partners!");
         AUTH.setHeader("Fingerprint", FINGERPRINT);
 
@@ -56,10 +54,12 @@ public class MineTogetherPartners {
             LOGGER.warn("Debug mode enabled. Prepare for _VERY_ verbose logging!");
         }
 
-        ModPackInfo.init();
-        ModPackInfo.waitForInfo(info -> AUTH.setHeader("Identifier", info.realName));
-        if (Objects.requireNonNull(Platform.getEnv()) == EnvType.CLIENT) {
+        if (Services.PLATFORM.isClient()) {
             MineTogetherPartnersClient.init();
         }
+
+        ModPackInfo.init();
+        ModPackInfo.waitForInfo(info -> AUTH.setHeader("Identifier", info.realName));
+
     }
 }

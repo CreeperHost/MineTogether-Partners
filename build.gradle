@@ -1,71 +1,100 @@
-import org.jetbrains.gradle.ext.ActionDelegationConfig.TestRunner
-
 plugins {
-    id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.11-SNAPSHOT" apply false
-    id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.5"
-}
-
-architectury {
-    minecraft = rootProject.minecraft_version
+    id 'net.fabricmc.fabric-loom' version '1.17.21' apply false
+    id 'net.neoforged.moddev' version '2.0.147' apply false
+    id 'com.gradleup.shadow' version '9.2.2' apply false
 }
 
 subprojects {
-    apply plugin: "dev.architectury.loom"
-
-    loom {
-        silentMojangMappingsLicense()
-
-        // Enable Java assertions on all run configs
-        runConfigs.each {
-            it.vmArg '-ea'
-        }
-    }
-
-    dependencies {
-        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-
-        mappings loom.officialMojangMappings()
-
-        localRuntime 'net.covers1624:DevLogin:0.1.0.5'
-    }
-}
-
-allprojects {
-    apply plugin: "java"
-    apply plugin: "architectury-plugin"
-    apply plugin: "maven-publish"
-
-    archivesBaseName = rootProject.archives_base_name
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
     version = rootProject.mod_version
     group = rootProject.maven_group
-
-    repositories {
-        mavenLocal()
-        maven {
-            name "CreeperHost"
-            url 'https://maven.creeperhost.net'
-        }
-        maven { url "https://maven.ftb.dev/releases" }
-    }
-
-    tasks.withType(JavaCompile) {
-        options.encoding = "UTF-8"
-        options.release = 21
-    }
-
+    base.archivesName = "${rootProject.archives_base_name}-${project.name}-${rootProject.minecraft_version}"
     java {
+        toolchain.languageVersion = JavaLanguageVersion.of(25)
         withSourcesJar()
+    }
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.release = 25
+    }
+    repositories {
+        mavenCentral()
+        maven { url = 'https://maven.creeperhost.net/release' }
+        maven { url = 'https://maven.creeperhost.net' }
+        maven { url = 'https://maven.fabricmc.net' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public' }
+    }
+    dependencies {
+        implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+        implementation "blue.endless:jankson:${rootProject.jankson_version}"
+        implementation("net.creeperhost:MineTogetherLib:${rootProject.mtlib_version}") {
+            exclude group: 'net.creeperhost', module: 'MineTogetherSessions'
+        }
+        implementation("net.creeperhost:MineTogetherSessions:${rootProject.mtsession_version}") {
+            transitive = false
+        }
+    }
+    processResources {
+        exclude 'assets/minetogetherpartners/atlases/gui.json'
+        eachFile {
+            if (path.startsWith('assets/minetogetherpartners/textures/gui/')) {
+                path = path.replace('textures/gui/', 'textures/gui/sprites/')
+            }
+        }
+        def properties = [version: project.version, minecraft_version: rootProject.minecraft_version,
+                          fabric_loader_version: rootProject.fabric_loader_version,
+                          neoforge_version: rootProject.neoforge_version,
+                          polylib_mod_version: rootProject.polylib_mod_version]
+        inputs.properties(properties)
+        filesMatching(['fabric.mod.json', 'META-INF/neoforge.mods.toml']) { expand properties }
     }
 }
 
-// Why in gods name is Architectry forcing both these to Gradle.
-// That is the most retarded thing I have ever seen, this framework needs to die in a hole.
-afterEvaluate {
-    idea.project.settings {
-        delegateActions {
-            // Give us non retarded unit testing and proper IDE integration.
-            testRunner = TestRunner.PLATFORM
+configure([project(':fabric'), project(':neoforge')]) {
+    apply plugin: 'com.gradleup.shadow'
+    sourceSets.main.java.srcDir project(':common').file('src/main/java')
+    sourceSets.main.resources.srcDir project(':common').file('src/main/resources')
+    configurations { shadowLib }
+    configurations.implementation.extendsFrom(configurations.shadowLib)
+    dependencies {
+        shadowLib 'org.apache.httpcomponents:httpclient:4.5.14'
+        shadowLib "blue.endless:jankson:${rootProject.jankson_version}"
+        shadowLib("net.creeperhost:MineTogetherLib:${rootProject.mtlib_version}") {
+            exclude group: 'net.creeperhost', module: 'MineTogetherSessions'
+        }
+        shadowLib("net.creeperhost:MineTogetherSessions:${rootProject.mtsession_version}") {
+            transitive = false
+        }
+    }
+    jar { archiveClassifier = 'dev' }
+    shadowJar {
+        dependsOn jar
+        configurations = [project.configurations.shadowLib]
+        mainSpec.sourcePaths.clear()
+        from(zipTree(jar.archiveFile))
+        archiveClassifier = ''
+        mergeServiceFiles()
+        exclude 'META-INF/*.SF', 'META-INF/*.RSA', 'META-INF/*.DSA'
+        relocate 'blue.endless', 'net.creeperhost.minetogetherpartners.repack.blue.endless'
+        relocate 'net.covers1624', 'net.creeperhost.minetogetherpartners.repack.net.covers1624'
+        relocate 'org.pircbotx', 'net.creeperhost.minetogetherpartners.repack.org.pircbotx'
+        relocate 'org.apache.http', 'net.creeperhost.minetogetherpartners.repack.org.apache.http'
+        relocate 'org.apache.commons.logging', 'net.creeperhost.minetogetherpartners.repack.org.apache.commons.logging'
+        relocate 'com.github.scribejava', 'net.creeperhost.minetogetherpartners.com.github.scribejava'
+        relocate 'fi.iki.elonen', 'net.creeperhost.minetogetherpartners.fi.iki.elonen'
+        relocate 'com.fasterxml.jackson', 'net.creeperhost.minetogetherpartners.com.fasterxml.jackson'
+        relocate 'net.creeperhost.minetogether.lib', 'net.creeperhost.minetogetherpartners.repack.minetogether.lib'
+        relocate 'net.creeperhost.minetogether.session', 'net.creeperhost.minetogetherpartners.repack.minetogether.session'
+    }
+    assemble.dependsOn shadowJar
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = "${rootProject.archives_base_name}-${project.name}"
+                artifact shadowJar
+                artifact sourcesJar
+            }
         }
     }
 }

@@ -1,109 +1,11 @@
-plugins {
-    id "com.github.johnrengelman.shadow" version "8.1.1"
-}
-
-architectury {
-    platformSetupLoomIde()
-    fabric()
-}
-
-loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
-
-    runs {
-        clientLogin {
-            client()
-            ideConfigGenerated true
-            mainClass.set 'net.covers1624.devlogin.DevLogin'
-
-            programArgs '--launch_target', 'net.fabricmc.loader.impl.launch.knot.KnotClient'
-        }
-    }
-}
-
-configurations {
-    common
-    shadowLib
-    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
-    shadowCommon.extendsFrom shadowLib
-    compileClasspath.extendsFrom common
-    runtimeClasspath.extendsFrom common
-    developmentFabric.extendsFrom common
-    implementation.extendsFrom shadowLib
-}
-
+plugins { id 'net.fabricmc.fabric-loom' }
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
-    modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
-    modApi ("net.creeperhost:polylib-fabric:${polylib_version}")
-
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
-
-    shadowLib "blue.endless:jankson:${jankson_version}"
-    shadowLib("net.creeperhost:MineTogetherLib:${mtlib_version}") {
-        exclude group: "net.creeperhost", module: "MineTogetherSessions"
-    }
-    shadowLib("net.creeperhost:MineTogetherSessions:${mtsession_version}") {
-        transitive false
-    }
+    minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+    implementation "net.creeperhost.polylib:polylib-fabric:${rootProject.polylib_version}"
 }
-
-processResources {
-    inputs.property "version", project.version
-
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
+loom {
+    accessWidenerPath = project(':common').file('src/main/resources/minetogetherpartners.accesswidener')
 }
-
-shadowJar {
-    configurations = [project.configurations.shadowCommon]
-    archiveClassifier = "dev-shadow"
-    mergeServiceFiles()
-
-    relocate 'blue.endless', 'net.creeperhost.minetogetherpartners.repack.blue.endless'
-    relocate 'net.covers1624', 'net.creeperhost.minetogetherpartners.repack.net.covers1624'
-    relocate 'org.pircbotx', 'net.creeperhost.minetogetherpartners.repack.org.pircbotx'
-    relocate 'com.github.scribejava', 'net.creeperhost.minetogetherpartners.com.github.scribejava'
-    relocate 'fi.iki.elonen', 'net.creeperhost.minetogetherpartners.fi.iki.elonen'
-    // TODO can we switch scribejava to using Gson?
-    relocate 'com.fasterxml.jackson', 'net.creeperhost.minetogetherpartners.com.fasterxml.jackson'
-    relocate 'net.creeperhost.minetogether.lib', 'net.creeperhost.minetogetherpartners.repack.minetogether.lib'
-    relocate 'net.creeperhost.minetogether.session', 'net.creeperhost.minetogetherpartners.repack.minetogether.session'
-}
-
-remapJar {
-    injectAccessWidener = true
-    input.set shadowJar.archiveFile
-    dependsOn shadowJar
-    archiveBaseName.set "${rootProject.archives_base_name}-${project.name}-${rootProject.minecraft_version}"
-    archiveClassifier = null
-}
-
-jar {
-    archiveClassifier = "dev"
-}
-
-sourcesJar {
-    def commonSources = project(":common").sourcesJar
-    dependsOn commonSources
-    from commonSources.archiveFile.map { zipTree(it) }
-}
-
-components.java {
-    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
-        skip()
-    }
-}
-
-publishing {
-    publications {
-        mavenFabric(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
-            from components.java
-        }
-    }
-}
-
+processResources { exclude 'META-INF/accesstransformer.cfg' }

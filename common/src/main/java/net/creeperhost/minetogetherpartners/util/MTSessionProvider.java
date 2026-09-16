@@ -1,7 +1,7 @@
 package net.creeperhost.minetogetherpartners.util;
 
-import dev.architectury.injectables.targets.ArchitecturyTarget;
-import dev.architectury.platform.Platform;
+import net.creeperhost.polylib.platform.Services;
+
 import net.creeperhost.minetogetherpartners.MineTogetherPlatform;
 import net.creeperhost.minetogether.lib.MineTogetherLib;
 import net.creeperhost.minetogether.session.MojangUtils;
@@ -25,8 +25,8 @@ public class MTSessionProvider implements SessionProvider {
     private static final String UA =
             "MineTogether-lib/" + MineTogetherLib.VERSION +
             " MineTogether-Partners-mod/" + MineTogetherPlatform.getVersion() +
-            " Minecraft/" + Platform.getMinecraftVersion() +
-            " Modloader/" + ArchitecturyTarget.getCurrentTarget();
+            " Minecraft/" + net.minecraft.SharedConstants.getCurrentVersion().name() +
+            " Modloader/" + Services.PLATFORM.getPlatformName();
     private final Minecraft MC = Minecraft.getInstance();
     private final User U = MC.getUser();
     private final String PN = U.getName();

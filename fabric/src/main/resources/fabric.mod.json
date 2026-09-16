@@ -2,7 +2,7 @@
     "schemaVersion": 1,
     "id": "minetogetherpartners",
     "version": "${version}",
-    "name": "MineTogether Parteners",
+    "name": "MineTogether Partners",
     "description": "",
     "authors": [
         "covers1624",
@@ -24,15 +24,16 @@
         ]
     },
     "depends": {
-        "fabricloader": ">=0.17.2",
-        "fabric": "*",
-        "minecraft": "~1.21.7",
-        "architectury": ">=17.0.8",
-        "polylib": ">=2107.1.0.176"
+        "fabricloader": ">=${fabric_loader_version}",
+        "fabric-api": "*",
+        "minecraft": "~${minecraft_version}",
+        "java": ">=25",
+        "polylib": ">=${polylib_mod_version}"
     },
     "suggests": {
         "flamingo": "*"
     },
+    "accessWidener": "minetogetherpartners.accesswidener",
     "mixins": [
         "minetogetherpartners-common.mixins.json"
     ]
