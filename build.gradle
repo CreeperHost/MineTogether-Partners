@@ -80,6 +80,7 @@ configure([project(':fabric'), project(':neoforge')]) {
         relocate 'net.covers1624', 'net.creeperhost.minetogetherpartners.repack.net.covers1624'
         relocate 'org.pircbotx', 'net.creeperhost.minetogetherpartners.repack.org.pircbotx'
         relocate 'org.apache.http', 'net.creeperhost.minetogetherpartners.repack.org.apache.http'
+        relocate 'org.apache.commons.codec', 'net.creeperhost.minetogetherpartners.repack.org.apache.commons.codec'
         relocate 'org.apache.commons.logging', 'net.creeperhost.minetogetherpartners.repack.org.apache.commons.logging'
         relocate 'com.github.scribejava', 'net.creeperhost.minetogetherpartners.com.github.scribejava'
         relocate 'fi.iki.elonen', 'net.creeperhost.minetogetherpartners.fi.iki.elonen'

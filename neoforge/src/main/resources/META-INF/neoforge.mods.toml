@@ -7,6 +7,7 @@ license = "GNU General Public License v3.0"
     modId = "minetogetherpartners"
     version = "${version}"
     displayName = "MineTogether Partners"
+    iconFile = "minetogether.png"
     authors = "covers1624, Gigabit101, Cloudhunter, CreeperHost!"
     description = ''''''
 
